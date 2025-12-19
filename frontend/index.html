@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Security Scanner</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-qrcode"></i> QR Code Security Scanner</h1>
+            <p class="subtitle">Upload a QR code image or enter URL to check for malicious content</p>
+        </header>
+
+        <main>
+            <div class="scanner-container">
+                <div class="input-section">
+                    <div class="tabs">
+                        <button class="tab active" id="upload-tab">Upload Image</button>
+                        <button class="tab" id="url-tab">Image URL</button>
+                        <button class="tab" id="direct-url-tab">Direct URL</button>
+                    </div>
+
+                    <!-- Upload Image Tab -->
+                    <div class="tab-content active" id="upload-content">
+                        <div class="upload-area" id="drop-area">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <h3>Drag & Drop QR Code Image</h3>
+                            <p>or</p>
+                            <button class="btn-browse" id="browse-btn">Browse Files</button>
+                            <input type="file" id="file-input" accept="image/*" hidden>
+                            <p class="file-info">Supports: PNG, JPG, JPEG, GIF, BMP</p>
+                        </div>
+                        <div id="image-preview"></div>
+                    </div>
+
+                    <!-- Image URL Tab -->
+                    <div class="tab-content" id="url-content">
+                        <div class="url-input">
+                            <input type="text" id="image-url" placeholder="Enter image URL containing QR code...">
+                            <button class="btn-scan" id="scan-url-btn">Scan QR</button>
+                        </div>
+                    </div>
+
+                    <!-- Direct URL Tab -->
+                    <div class="tab-content" id="direct-url-content">
+                        <div class="url-input">
+                            <input type="text" id="direct-url" placeholder="Enter URL to analyze directly...">
+                            <button class="btn-scan" id="analyze-url-btn">Analyze URL</button>
+                        </div>
+                    </div>
+
+                    <div class="api-url">
+                        <label>Backend API URL:</label>
+                        <input type="text" id="api-endpoint" value="https://your-render-app.onrender.com">
+                        <button class="btn-test" id="test-api-btn">Test Connection</button>
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <h2><i class="fas fa-search"></i> Scan Results</h2>
+                    
+                    <div class="loading" id="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing QR code...</p>
+                    </div>
+
+                    <div class="results" id="results">
+                        <div class="empty-state">
+                            <i class="fas fa-qrcode"></i>
+                            <p>Scan a QR code to see results here</p>
+                        </div>
+                    </div>
+
+                    <div class="statistics" id="statistics" style="display: none;">
+                        <h3><i class="fas fa-chart-bar"></i> Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <span class="stat-label">Total Scans</span>
+                                <span class="stat-value" id="total-scans">0</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Safe URLs</span>
+                                <span class="stat-value safe" id="safe-count">0</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Malicious URLs</span>
+                                <span class="stat-value malicious" id="malicious-count">0</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Detection Rate</span>
+                                <span class="stat-value" id="detection-rate">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-card">
+                    <h3><i class="fas fa-shield-alt"></i> How It Works</h3>
+                    <ol>
+                        <li>Upload QR code image or enter image URL</li>
+                        <li>System extracts URL from QR code</li>
+                        <li>AI model analyzes URL features</li>
+                        <li>Get instant security assessment</li>
+                    </ol>
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Malicious Indicators</h3>
+                    <ul>
+                        <li>Suspicious domain names</li>
+                        <li>Shortened URLs hiding destination</li>
+                        <li>IP addresses instead of domain names</li>
+                        <li>Excessive special characters</li>
+                        <li>Unusual URL structure</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fas fa-lightbulb"></i> Safety Tips</h3>
+                    <ul>
+                        <li>Verify sender before scanning</li>
+                        <li>Check URL before clicking</li>
+                        <li>Use URL expanders for shortened links</li>
+                        <li>Keep security software updated</li>
+                        <li>Report suspicious QR codes</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>QR Code Security Scanner | Backend: <span id="backend-status">Not connected</span></p>
+            <p class="copyright">© 2024 Security AI Project | Model: Custom CNN</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
