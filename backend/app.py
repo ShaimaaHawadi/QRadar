@@ -8,7 +8,6 @@ import numpy as np
 import tensorflow as tf
 from PIL import Image
 import cv2
-import pyzbar.pyzbar as pyzbar
 from io import BytesIO
 import requests
 from urllib.parse import urlparse
@@ -72,23 +71,24 @@ def extract_qr_data(image_path_or_url):
         # Convert to OpenCV format
         img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
         
-        # Decode QR code
-        decoded_objects = pyzbar.decode(img_cv)
-        
-        if decoded_objects:
-            results = []
-            for obj in decoded_objects:
-                if obj.type == 'QRCODE':
-                    data = obj.data.decode('utf-8')
-                    
-                    # Check if extracted data is a URL
-                    is_url = validators.url(data)
-                    
+        # Decode QR code using OpenCV
+        detector = cv2.QRCodeDetector()
+        data, points, _ = detector.detectAndDecodeMulti(img_cv)  # لدعم أكثر من QR
+        results = []
+
+        # detectAndDecodeMulti قد يرجع None إذا لم يوجد QR
+        if points is not None and data:
+            for i, qr_data in enumerate(data):
+                if qr_data:  # تحقق من أن البيانات ليست فارغة
+                    is_url = validators.url(qr_data)
+                    polygon = points[i].tolist() if points is not None else None
+                    x, y, w, h = cv2.boundingRect(points[i].astype(int)) if points is not None else (0,0,0,0)
+
                     results.append({
-                        'data': data,
+                        'data': qr_data,
                         'type': 'url' if is_url else 'text',
-                        'rect': obj.rect,
-                        'polygon': obj.polygon
+                        'rect': {'x': x, 'y': y, 'w': w, 'h': h},
+                        'polygon': polygon
                     })
             
             return {
@@ -106,7 +106,7 @@ def extract_qr_data(image_path_or_url):
         return {
             'success': False,
             'message': f'Error processing image: {str(e)}'
-        }
+        
 
 def preprocess_url_for_model(url):
     """
@@ -360,3 +360,4 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
 
     app.run(host='0.0.0.0', port=port, debug=False)
+
