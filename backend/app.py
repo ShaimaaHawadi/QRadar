@@ -30,16 +30,16 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Load your trained model
-MODEL_PATH = 'model/qr_classifier.h5'
+MODEL_PATH = 'model/final_url_classifier.h5'
 
 def load_model():
     """Load the pre-trained TensorFlow/Keras model"""
     try:
         model = tf.keras.models.load_model(MODEL_PATH)
-        print("✅ Model loaded successfully")
+        print(" Model loaded successfully")
         return model
     except Exception as e:
-        print(f"❌ Error loading model: {e}")
+        print(f" Error loading model: {e}")
         return None
 
 # Global model variable
@@ -358,4 +358,5 @@ def model_info():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
+
     app.run(host='0.0.0.0', port=port, debug=False)
