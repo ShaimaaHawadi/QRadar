@@ -9,7 +9,7 @@ pandas>=2.0.3
 requests>=2.31.0
 gunicorn==21.2.0
 python-decouple>=3.8
-PYTHON_VERSION==3.10.11
+
 
 
 
