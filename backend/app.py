@@ -52,12 +52,6 @@ def allowed_file(filename):
 def extract_qr_data(image_path_or_url):
     """
     Extract data from QR code image
-    
-    Args:
-        image_path_or_url: Path to image file or URL
-    
-    Returns:
-        dict: Extracted data and status
     """
     try:
         # Handle URL or file path
@@ -67,22 +61,22 @@ def extract_qr_data(image_path_or_url):
             img = Image.open(image_bytes)
         else:
             img = Image.open(image_path_or_url)
-        
+
         # Convert to OpenCV format
         img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-        
+
         # Decode QR code using OpenCV
         detector = cv2.QRCodeDetector()
-        data, points, _ = detector.detectAndDecodeMulti(img_cv)  # لدعم أكثر من QR
+        data, points, _ = detector.detectAndDecodeMulti(img_cv)
+
         results = []
 
-        # detectAndDecodeMulti قد يرجع None إذا لم يوجد QR
         if points is not None and data:
             for i, qr_data in enumerate(data):
-                if qr_data:  # تحقق من أن البيانات ليست فارغة
+                if qr_data:
                     is_url = validators.url(qr_data)
-                    polygon = points[i].tolist() if points is not None else None
-                    x, y, w, h = cv2.boundingRect(points[i].astype(int)) if points is not None else (0,0,0,0)
+                    polygon = points[i].tolist()
+                    x, y, w, h = cv2.boundingRect(points[i].astype(int))
 
                     results.append({
                         'data': qr_data,
@@ -90,23 +84,23 @@ def extract_qr_data(image_path_or_url):
                         'rect': {'x': x, 'y': y, 'w': w, 'h': h},
                         'polygon': polygon
                     })
-            
+
             return {
                 'success': True,
                 'results': results,
                 'message': f'Found {len(results)} QR code(s)'
             }
-        else:
-            return {
-                'success': False,
-                'message': 'No QR code found in image'
-            }
-    
+
+        return {
+            'success': False,
+            'message': 'No QR code found in image'
+        }
+
     except Exception as e:
         return {
             'success': False,
             'message': f'Error processing image: {str(e)}'
-        
+        }
 
 def preprocess_url_for_model(url):
     """
@@ -360,4 +354,5 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
 
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
