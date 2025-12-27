@@ -19,15 +19,6 @@ import time
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-# 🔥 Load model ONCE at startup
-try:
-    model = load_model("final_url_classifier.h5")
-    MODEL_LOADED = True
-except Exception as e:
-    model = None
-    MODEL_LOADED = False
-    print("Model load failed:", e)
-
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload
 app.config['UPLOAD_FOLDER'] = 'temp_uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
@@ -193,6 +184,7 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
 
