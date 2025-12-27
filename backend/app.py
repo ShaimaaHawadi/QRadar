@@ -28,7 +28,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Load Model
 # ----------------------------
 START_TIME = time.time()
-MODEL_PATH = "final_url_classifier.h5"
+MODEL_PATH = "Model/final_url_classifier.h5"
 
 try:
     model = tf.keras.models.load_model(MODEL_PATH)
@@ -184,6 +184,7 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
 
