@@ -36,18 +36,17 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # ----------------------------
 # Load Model
 # ----------------------------
-MODEL_PATH = 'Model/final_url_classifier.h5'
+START_TIME = time.time()
+MODEL_PATH = "final_url_classifier.h5"
 
-def load_model():
-    try:
-        model = tf.keras.models.load_model(MODEL_PATH)
-        print("✅ Model loaded successfully")
-        return model
-    except Exception as e:
-        print(f"❌ Error loading model: {e}")
-        return None
-
-model = load_model()
+try:
+    model = tf.keras.models.load_model(MODEL_PATH)
+    MODEL_LOADED = True
+    print("✅ Model loaded successfully")
+except Exception as e:
+    model = None
+    MODEL_LOADED = False
+    print("❌ Model load failed:", e)
 
 # ----------------------------
 # Helpers
@@ -189,5 +188,6 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
