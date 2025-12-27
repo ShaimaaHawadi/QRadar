@@ -1,6 +1,6 @@
 Flask>=2.3.3
 flask-cors>=4.0.0
-tensorflow==2.15.0
+tensorflow==2.19.0
 opencv-python>=4.8.1
 pillow>=10.0.0
 numpy<2.0.0,>=1.23.5
@@ -10,3 +10,4 @@ gunicorn==21.2.0
 python-decouple>=3.8
 keras==2.15.0
 validators==0.20.0
+
