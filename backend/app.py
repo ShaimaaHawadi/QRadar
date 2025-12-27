@@ -133,7 +133,12 @@ def home():
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    return jsonify({'status': 'healthy', 'model_loaded': model is not None, 'timestamp': datetime.now().isoformat()})
+    return jsonify({
+        'status': 'healthy',
+        'model_loaded': MODEL_LOADED,
+        'uptime_seconds': int(time.time() - START_TIME),
+        'timestamp': datetime.utcnow().isoformat()
+    })
 
 @app.route('/api/scan', methods=['POST'])
 def scan_qr():
@@ -188,6 +193,7 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
 
