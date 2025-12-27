@@ -10,12 +10,23 @@ import numpy as np
 from PIL import Image
 import cv2
 import tensorflow as tf
+from tensorflow.keras.models import load_model
+import time
 
 # ----------------------------
 # Flask App Initialization
 # ----------------------------
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+# 🔥 Load model ONCE at startup
+try:
+    model = load_model("final_url_classifier.h5")
+    MODEL_LOADED = True
+except Exception as e:
+    model = None
+    MODEL_LOADED = False
+    print("Model load failed:", e)
 
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload
 app.config['UPLOAD_FOLDER'] = 'temp_uploads'
@@ -178,4 +189,5 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
