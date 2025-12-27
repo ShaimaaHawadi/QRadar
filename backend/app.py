@@ -33,11 +33,11 @@ MODEL_PATH = "final_url_classifier.h5"
 try:
     model = tf.keras.models.load_model(MODEL_PATH)
     MODEL_LOADED = True
-    print("✅ Model loaded successfully")
+    print(" Model loaded successfully")
 except Exception as e:
     model = None
     MODEL_LOADED = False
-    print("❌ Model load failed:", e)
+    print(" Model load failed:", e)
 
 # ----------------------------
 # Helpers
@@ -184,6 +184,7 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
 
