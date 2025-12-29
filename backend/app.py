@@ -33,7 +33,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Load Model
 # ----------------------------
 START_TIME = time.time()
-MODEL_PATH = "Model/final_url_classifier.h5"
+MODEL_PATH = "Model/final_url_classifier.keras"
 
 if not os.path.exists(MODEL_PATH):
     raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
@@ -186,5 +186,6 @@ def analyze_url_route():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
