@@ -40,7 +40,7 @@ MODEL_PATH = "Model/final_url_classifier.keras"
 if not os.path.exists(MODEL_PATH):
     raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
     
-model = load_model(MODEL_PATH, compile=False)
+model = keras.models.load_model(MODEL_PATH, compile=False)
 print(" Model loaded successfully")
 
 print(model.inputs)
@@ -196,6 +196,7 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
 
