@@ -37,12 +37,12 @@ START_TIME = time.time()
 print("Files in model dir:", os.listdir("Model"))
 MODEL_PATH = "Model/final_url_classifier.keras"
 
-try:
-    model = load_model(MODEL_PATH, compile=False)
-    print(" Model loaded successfully")
-    
-    print(model.inputs)
-    print(model.outputs)
+
+model = load_model(MODEL_PATH, compile=False)
+print(" Model loaded successfully")
+
+print(model.inputs)
+print(model.outputs)
 
 # except Exception as e:
 #     model = None
@@ -194,6 +194,7 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
 
