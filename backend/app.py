@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 from datetime import datetime
@@ -33,23 +33,21 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Load Model
 # ----------------------------
 START_TIME = time.time()
-
-print("Files in model dir:", os.listdir("Model"))
 MODEL_PATH = "Model/final_url_classifier.keras"
+MODEL_LOADED = False
+model = None
 
 if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
-    
-model = keras.models.load_model(MODEL_PATH, compile=False)
-print(" Model loaded successfully")
-
-print(model.inputs)
-print(model.outputs)
-
-# except Exception as e:
-#     model = None
-#     MODEL_LOADED = False
-#     print(" Model load failed:", e)
+    print(f"❌ Model file not found at {MODEL_PATH}. Please check your path.")
+else:
+    try:
+        model = keras.models.load_model(MODEL_PATH, compile=False)
+        MODEL_LOADED = True
+        print("✅ Model loaded successfully")
+        print(model.inputs)
+        print(model.outputs)
+    except Exception as e:
+        print(f"❌ Failed to load model: {e}")
 
 # ----------------------------
 # Helpers
@@ -109,7 +107,7 @@ def preprocess_url_for_model(url):
     return features
 
 def predict_url(url):
-    if model is None:
+    if not MODEL_LOADED or model is None:
         return {'success': False, 'error': 'Model not loaded'}
     try:
         features = preprocess_url_for_model(url)
@@ -137,7 +135,7 @@ def home():
 @app.route('/api/health', methods=['GET'])
 def health_check():
     return jsonify({
-        'status': 'healthy',
+        'status': 'healthy' if MODEL_LOADED else 'unhealthy',
         'model_loaded': MODEL_LOADED,
         'uptime_seconds': int(time.time() - START_TIME),
         'timestamp': datetime.utcnow().isoformat()
@@ -176,7 +174,7 @@ def scan_qr():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/analyze/url', methods=['POST'])
-def analyze_url():
+def analyze_url_route():
     try:
         data = request.json
         if not data or 'url' not in data:
@@ -196,19 +194,3 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
