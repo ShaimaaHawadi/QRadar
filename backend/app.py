@@ -33,21 +33,13 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Load Model
 # ----------------------------
 START_TIME = time.time()
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "Model", "final_url_classifier.keras")
-MODEL_LOADED = False
-model = None
+MODEL_PATH = "Model/final_url_classifier.h5"
 
 if not os.path.exists(MODEL_PATH):
-    print(f"❌ Model file not found at {MODEL_PATH}. Please check your path.")
-else:
-    try:
-        model = keras.models.load_model(MODEL_PATH, compile=False)
-        MODEL_LOADED = True
-        print("✅ Model loaded successfully")
-        print(model.inputs)
-        print(model.outputs)
-    except Exception as e:
-        print(f"❌ Failed to load model: {e}")
+    raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
+
+model = keras.models.load_model(MODEL_PATH, compile=False)
+print("Model loaded successfully")
 
 # ----------------------------
 # Helpers
@@ -194,4 +186,5 @@ def analyze_url_route():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
