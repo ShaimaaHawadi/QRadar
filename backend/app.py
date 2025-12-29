@@ -10,7 +10,7 @@ import numpy as np
 from PIL import Image
 import cv2
 import tensorflow as tf
-from tensorflow.keras.models import load_model
+from tensorflow import keras
 import time
 
 # ----------------------------
@@ -196,6 +196,7 @@ def analyze_url():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
 
